@@ -1,0 +1,43 @@
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Threading;
+
+namespace NestedJosntoDictionary
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            string sample = "{\"dataSource\":{\"emp\":[{\"id\":123,\"name\":\"Pankaj Kumar\",\"permanent\":true,\"address\":{\"street\":\"El Camino Real\",\"city\":\"San Jose\",\"zipcode\":95014},\"phoneNumbers\":[9988664422,1234567890],\"role\":\"Developer\"}]}}";
+            string sample2 = "{\"sample\":[{\"data\":\"test\",\"test\":null},{\"data3\":\"test2\",\"test3\":\"43\"}]}";
+            var data = JsonConvert.DeserializeObject<dynamic>(sample2);
+
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            var dicValues = ConvertToDictionaryValues(data, dict);
+
+            Console.WriteLine("Hello World!");
+        }
+
+        private static Dictionary<string, string> ConvertToDictionaryValues(dynamic data, Dictionary<string, string> dict)
+        {           
+            if(data!=null)
+            {
+                int count = 0;
+                foreach (var item in data)
+                {
+                    if (item.Type != Newtonsoft.Json.Linq.JTokenType.String && item.Type != Newtonsoft.Json.Linq.JTokenType.Integer && item.Type != Newtonsoft.Json.Linq.JTokenType.Boolean)
+                        dict = ConvertToDictionaryValues(item, dict);
+                    else
+                        dict.Add(((Newtonsoft.Json.Linq.JToken)item).Path.Replace("[", ".").Replace("]", "").ToString(), item.Value.ToString());
+                    count++;
+                }
+
+            }
+
+            return dict;
+        }
+    }
+}
