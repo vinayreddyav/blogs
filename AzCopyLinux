@@ -1,0 +1,57 @@
+Login to azure
+Create a VM - Red Hat Enterprise version 7.0
+Download Putty and connect 
+Create Folder logs 
+create a random file with 10 MB
+base64 /dev/urandom | head -c 10000000 > file.txt
+Open file cat file.txt
+
+Create Storage account 
+Create container
+
+
+To install AzCopy on Linux, you can run the following shell script, or you can download the tar file and run it from where ever you want. This script will put the AzCopy executable into the /usr/bin folder so that you can run it from anywhere.
+
+ 
+#Download AzCopy
+wget https://aka.ms/downloadazcopy-v10-linux
+ 
+#Expand Archive
+tar -xvf downloadazcopy-v10-linux
+ 
+#(Optional) Remove existing AzCopy version
+sudo rm /usr/bin/azcopy
+ 
+#Move AzCopy to the destination you want to store it
+sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+
+
+Create App registrations 
+provide access 
+tenantid: 
+applictionid: 
+
+client secret - 
+
+service principle role - Storage Blob data contributer
+
+
+
+export AZCOPY_SPA_CLIENT_SECRET=""
+azcopy login --service-principal --application-id "" --tenant-id=""
+
+azcopy copy "/root/azcopytest/*" "https://saazcopytestlinux.blob.core.windows.net/logs"
+azcopy sync "/root/azcopytest/logs" "https://saazcopytestlinux.blob.core.windows.net/logs"
+
+
+
+/dev/urandom tr -dc "X" | head -c1000 > file.txt
+
+ bash /root/azcopytest/testcontainer/testazcopy.sh
+
+vi samplescript.sh
+
+crontab -e
+crontab -l
+
+*/5 * * * *  /root/azcopytest/testcontainer/testazcopy.sh >/root/azcopytest/testcontainer/logs.txt 2>&1
